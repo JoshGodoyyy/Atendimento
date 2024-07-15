@@ -1,3 +1,9 @@
 class ApiConfig {
-  static const String url = 'http://192.168.15.9:5220';
+  static String? _url;
+
+  static String get url => _url ?? '';
+
+  static set url(String url) {
+    _url = url;
+  }
 }

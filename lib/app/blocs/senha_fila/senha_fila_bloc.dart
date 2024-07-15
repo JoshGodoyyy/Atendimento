@@ -34,6 +34,8 @@ class SenhaFilaBloc {
             senha: senha,
           ),
         );
+      } else if (event is Insert) {
+        await _repository.insert(event.idFila, event.senha);
       }
     } catch (ex) {
       _output.add(

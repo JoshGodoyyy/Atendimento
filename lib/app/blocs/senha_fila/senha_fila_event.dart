@@ -5,3 +5,13 @@ class Get extends SenhaFilaEvent {
 
   Get({required this.idFila});
 }
+
+class Insert extends SenhaFilaEvent {
+  final int idFila;
+  final int senha;
+
+  Insert({
+    required this.idFila,
+    required this.senha,
+  });
+}

@@ -5,6 +5,7 @@ import '../../blocs/senha_fila/senha_fila_bloc.dart';
 import '../../blocs/senha_fila/senha_fila_event.dart';
 import '../../blocs/senha_fila/senha_fila_state.dart';
 import '../../models/fila_atendimento_model.dart';
+import '../../repositories/senha_fila.dart';
 import '../../ui/widgets/custom_shape.dart';
 import '../home_page/widgets/logo_icon.dart';
 
@@ -21,11 +22,44 @@ class SenhaPage extends StatefulWidget {
 
 class _SenhaPageState extends State<SenhaPage> {
   late SenhaFilaBloc _bloc;
+  int? _resultado;
 
   @override
   void initState() {
     super.initState();
     _bloc = SenhaFilaBloc();
+    _connect();
+  }
+
+  _connect() async {
+    final driver = ElginPrinter(
+      type: ElginPrinterType.MINIPDV,
+    );
+
+    try {
+      _resultado = await Elgin.printer.connect(driver: driver);
+    } catch (ex) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(ex.toString()),
+          ),
+        );
+      });
+    }
+
+    if (_resultado == null) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Erro ao tentar se conectar a impressora'),
+          ),
+        );
+      });
+      return;
+    }
+
     _fetchSenha();
   }
 
@@ -40,39 +74,56 @@ class _SenhaPageState extends State<SenhaPage> {
   }
 
   imprimir(int senha) async {
-    final driver = ElginPrinter(
-      type: ElginPrinterType.MINIPDV,
-    );
-
+    await Future.delayed(const Duration(seconds: 2));
     try {
-      final int? result = await Elgin.printer.connect(driver: driver);
-      if (result == null) return;
-      if (result == 0) {
-        await Elgin.printer.printString(widget.fila.nome!,
-            align: ElginAlign.CENTER, fontSize: ElginSize.MD);
-        await Elgin.printer.feed(4);
-        await Elgin.printer.printString(senha.toString(),
-            align: ElginAlign.CENTER, fontSize: ElginSize.XL);
-        await Elgin.printer.feed(4);
-        await Elgin.printer.printString(hoje(),
-            align: ElginAlign.CENTER, fontSize: ElginSize.MD);
-        await Elgin.printer.feed(4);
-        await Elgin.printer.cut(lines: 2);
-        await Elgin.printer.disconnect();
-      }
+      await Elgin.printer.printString(widget.fila.nome!,
+          align: ElginAlign.CENTER, fontSize: ElginSize.MD);
+      await Elgin.printer.feed(4);
+      await Elgin.printer.printString(senha.toString().padLeft(3, '0'),
+          align: ElginAlign.CENTER, fontSize: ElginSize.XL);
+      await Elgin.printer.feed(4);
+      await Elgin.printer.printString(hoje(),
+          align: ElginAlign.CENTER, fontSize: ElginSize.MD);
+      await Elgin.printer.feed(4);
+      await Elgin.printer.cut(lines: 2);
+      await Elgin.printer.disconnect();
     } on ElginException catch (e) {
-      if (mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.error.message),
           ),
         );
+      });
+      return;
+    } catch (ex) {
+      if (ex is TypeError) {
+        _salvarSenha(senha);
+      } else {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(ex.toString()),
+            ),
+          );
+        });
+
+        return;
       }
     }
+  }
 
-    if (mounted) {
+  _salvarSenha(int senha) async {
+    await SenhaFila().insert(
+      int.parse(
+        widget.fila.id.toString(),
+      ),
+      senha,
+    );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Navigator.pop(context);
-    }
+    });
   }
 
   String hoje() {
@@ -118,7 +169,9 @@ class _SenhaPageState extends State<SenhaPage> {
                   ),
                 );
               } else if (snapshot.data is Loaded) {
-                imprimir(snapshot.data!.senha);
+                if (_resultado == 0) {
+                  imprimir(snapshot.data!.senha);
+                }
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -165,7 +218,7 @@ class _SenhaPageState extends State<SenhaPage> {
                             style: const TextStyle(fontSize: 24),
                           ),
                           Text(
-                            snapshot.data!.senha.toString(),
+                            snapshot.data!.senha.toString().padLeft(3, '0'),
                             style: const TextStyle(
                               fontSize: 90,
                               fontWeight: FontWeight.w700,

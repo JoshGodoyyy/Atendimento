@@ -20,4 +20,17 @@ class SenhaFila {
       throw Exception(ex);
     }
   }
+
+  Future<void> insert(int idFila, int senha) async {
+    await http.post(
+      Uri.parse('$_url/Insert'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+        {
+          'password': senha,
+          'idQueue': idFila,
+        },
+      ),
+    );
+  }
 }

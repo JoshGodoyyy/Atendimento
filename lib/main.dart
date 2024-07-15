@@ -1,10 +1,9 @@
+import 'package:atendimento/app/ui/theme/theme_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'app/pages/splash/splash_screen.dart';
 
 void main() {
   runApp(const MainApp());
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }
 
 class MainApp extends StatelessWidget {
@@ -12,8 +11,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SplashScreen(),
+    return MaterialApp(
+      home: const SplashScreen(),
+      theme: ThemeConfig.theme,
       debugShowCheckedModeBanner: false,
     );
   }

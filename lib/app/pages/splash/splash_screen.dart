@@ -1,6 +1,10 @@
+import 'package:atendimento/app/config/api_config.dart';
+import 'package:atendimento/app/pages/api_config_page/api_config_page.dart';
 import 'package:atendimento/app/pages/home_page/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import '../../config/api_url_manager.dart';
 import '../../config/filas_atendimento.dart';
 import '../../repositories/empresa.dart';
 import '../../repositories/fila_atendimento.dart';
@@ -16,11 +20,28 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    fetchData();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    _fetchApiURL();
   }
 
-  Future<void> fetchData() async {
+  _fetchApiURL() async {
+    String url = await ApiUrlManager.get();
+
+    if (url == '' && mounted) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ApiConfigPage(),
+        ),
+      );
+
+      return;
+    }
+
+    ApiConfig.url = url;
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
     var navigator = Navigator.of(context);
 
     FilasAtendimento().empresa = await Empresa().fetchData();
@@ -36,16 +57,18 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff12111F),
       body: Container(
-        width: MediaQuery.of(context).size.width,
-        color: const Color(0xff12111F),
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/images/logo_light.png',
-              width: 180,
+            Hero(
+              tag: 'logo',
+              child: Image.asset(
+                'assets/images/logo_light.png',
+                width: 180,
+              ),
             ),
             const SizedBox(height: 16),
             const LinearProgressIndicator(),

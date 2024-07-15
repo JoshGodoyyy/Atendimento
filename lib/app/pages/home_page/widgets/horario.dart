@@ -39,4 +39,9 @@ class _HorarioState extends State<Horario> {
       style: const TextStyle(fontSize: 20),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }

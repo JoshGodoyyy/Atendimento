@@ -17,7 +17,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFA7A6A6),
       body: Stack(
         children: [
           ClipPath(
@@ -79,15 +78,12 @@ class _HomePageState extends State<HomePage> {
                   fontSize: 18,
                 ),
               ),
+              Text(
+                  '${MediaQuery.of(context).size.width}x${MediaQuery.of(context).size.height}'),
             ],
           ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
