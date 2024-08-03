@@ -1,15 +1,15 @@
 import '../models/empresa_model.dart';
 import '../models/fila_atendimento_model.dart';
 
-class FilasAtendimento {
-  static final FilasAtendimento _instance = FilasAtendimento._();
+class Constantes {
+  static final Constantes _instance = Constantes._();
 
   EmpresaModel? empresa;
   List<FilaAtendimentoModel>? filas;
 
-  factory FilasAtendimento() {
+  factory Constantes() {
     return _instance;
   }
 
-  FilasAtendimento._();
+  Constantes._();
 }

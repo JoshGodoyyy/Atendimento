@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../config/filas_atendimento.dart';
+import '../../config/constantes.dart';
 import '../../ui/widgets/custom_shape.dart';
 import 'widgets/botao_fila.dart';
 import 'widgets/horario.dart';
@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 140,
                 height: 140,
                 margin: const EdgeInsets.all(16),
                 child: const LogoIcon(),
@@ -50,16 +49,17 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(24),
                   child: GridView.builder(
                     shrinkWrap: true,
+                    padding: const EdgeInsets.all(24),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 5,
                       crossAxisSpacing: 20,
                       mainAxisSpacing: 20,
                     ),
-                    itemCount: FilasAtendimento().filas!.length,
+                    itemCount: Constantes().filas!.length,
                     itemBuilder: (context, index) {
                       return BotaoFila(
-                        item: FilasAtendimento().filas![index],
+                        item: Constantes().filas![index],
                       );
                     },
                   ),
@@ -78,8 +78,6 @@ class _HomePageState extends State<HomePage> {
                   fontSize: 18,
                 ),
               ),
-              Text(
-                  '${MediaQuery.of(context).size.width}x${MediaQuery.of(context).size.height}'),
             ],
           ),
         ],

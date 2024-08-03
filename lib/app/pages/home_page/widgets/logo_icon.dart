@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
-import '../../../config/filas_atendimento.dart';
+import '../../../config/constantes.dart';
 
 class LogoIcon extends StatelessWidget {
   const LogoIcon({super.key});
@@ -9,7 +9,7 @@ class LogoIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.memory(
-      base64Decode(FilasAtendimento().empresa!.logo!),
+      base64Decode(Constantes().empresa!.logo!),
     );
   }
 }

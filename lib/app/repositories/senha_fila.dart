@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:atendimento/app/models/senha_fila_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../config/api_config.dart';
@@ -6,7 +7,7 @@ import '../config/api_config.dart';
 class SenhaFila {
   final String _url = '${ApiConfig.url}/PasswordQueue';
 
-  Future<int> fetchSenha(int idFila) async {
+  Future<dynamic> fetchSenha(int idFila) async {
     final response = await http.post(
       Uri.parse(_url),
       headers: {'Content-Type': 'application/json'},
@@ -14,10 +15,14 @@ class SenhaFila {
     );
 
     try {
-      num data = jsonDecode(response.body);
-      return int.parse(data.toString());
+      var data = jsonDecode(response.body);
+      return SenhaFilaModel.fromJson(data);
     } catch (ex) {
-      throw Exception(ex);
+      if (response.body.startsWith('System.Exception')) {
+        throw Exception(response.body);
+      } else {
+        throw Exception(ex);
+      }
     }
   }
 

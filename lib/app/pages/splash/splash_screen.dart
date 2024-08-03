@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../config/api_url_manager.dart';
-import '../../config/filas_atendimento.dart';
+import '../../config/constantes.dart';
 import '../../repositories/empresa.dart';
 import '../../repositories/fila_atendimento.dart';
 
@@ -44,8 +44,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _fetchData() async {
     var navigator = Navigator.of(context);
 
-    FilasAtendimento().empresa = await Empresa().fetchData();
-    FilasAtendimento().filas = await FilaAtendimento().fetchTiposAtendimento();
+    Constantes().empresa = await Empresa().fetchData();
+    Constantes().filas = await FilaAtendimento().fetchTiposAtendimento();
 
     navigator.pushReplacement(
       MaterialPageRoute(

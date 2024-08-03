@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../models/senha_fila_model.dart';
 import '../../repositories/senha_fila.dart';
 import 'senha_fila_event.dart';
 import 'senha_fila_state.dart';
@@ -20,7 +21,7 @@ class SenhaFilaBloc {
   }
 
   void _mapEventToState(SenhaFilaEvent event) async {
-    int senha;
+    SenhaFilaModel senha;
 
     _output.add(
       Loading(),
@@ -31,11 +32,14 @@ class SenhaFilaBloc {
         senha = await _repository.fetchSenha(event.idFila);
         _output.add(
           Loaded(
-            senha: senha,
+            modelo: senha,
           ),
         );
       } else if (event is Insert) {
-        await _repository.insert(event.idFila, event.senha);
+        await _repository.insert(
+          event.idFila,
+          event.senha,
+        );
       }
     } catch (ex) {
       _output.add(
