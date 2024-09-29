@@ -32,10 +32,10 @@ class Ferramentas {
     await Elgin.printer.printString(
       Constantes().empresa!.nome!,
       align: ElginAlign.CENTER,
-      fontSize: ElginSize.SM,
+      fontSize: ElginSize.a,
     );
     await Elgin.printer.printString(
-      '---------------',
+      '----------------',
       align: ElginAlign.CENTER,
       fontSize: ElginSize.MD,
     );
@@ -43,36 +43,36 @@ class Ferramentas {
     await Elgin.printer.printString(
       fila,
       align: ElginAlign.CENTER,
-      fontSize: ElginSize.MD,
+      fontSize: ElginSize.LG,
     );
     await Elgin.printer.feed(4);
     await Elgin.printer.printString(
       '$prefixo${senha.toString().padLeft(4, '0')}',
       align: ElginAlign.CENTER,
-      fontSize: ElginSize.LG,
+      fontSize: ElginSize.XL,
     );
     await Elgin.printer.feed(4);
     await Elgin.printer.printString(
       horario(),
       align: ElginAlign.CENTER,
-      fontSize: ElginSize.MD,
+      fontSize: ElginSize.a,
     );
     await Elgin.printer.feed(1);
     await Elgin.printer.printString(
       hoje(),
       align: ElginAlign.CENTER,
-      fontSize: ElginSize.MD,
+      fontSize: ElginSize.a,
     );
     await Elgin.printer.feed(4);
     await Elgin.printer.printString(
-      '---------------',
+      '----------------',
       align: ElginAlign.CENTER,
       fontSize: ElginSize.MD,
     );
     await Elgin.printer.printString(
       Constantes().empresa!.endereco!,
       align: ElginAlign.CENTER,
-      fontSize: ElginSize.SM,
+      fontSize: ElginSize.a,
     );
     await Elgin.printer.feed(2);
     await Elgin.printer.cut(lines: 2);

@@ -11,9 +11,11 @@ class Get extends SenhaFilaEvent {
 class Insert extends SenhaFilaEvent {
   final int idFila;
   final int senha;
+  final String prefixo;
 
   Insert({
     required this.idFila,
     required this.senha,
+    required this.prefixo,
   });
 }

@@ -26,13 +26,14 @@ class SenhaFila {
     }
   }
 
-  Future<void> insert(int idFila, int senha) async {
+  Future<void> insert(int idFila, int senha, String prefixo) async {
     await http.post(
       Uri.parse('$_url/Insert'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(
         {
           'password': senha,
+          'prefix': prefixo,
           'idQueue': idFila,
         },
       ),

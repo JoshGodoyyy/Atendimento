@@ -110,16 +110,16 @@ class _SenhaPageState extends State<SenhaPage> {
     }
   }
 
-  _salvarSenha(int senha) async {
+  _salvarSenha(int senha, String prefixo) async {
     await Future.delayed(
       const Duration(seconds: 1),
     );
     await SenhaFila().insert(
-      int.parse(
-        widget.fila.id.toString(),
-      ),
-      senha,
-    );
+        int.parse(
+          widget.fila.id.toString(),
+        ),
+        senha,
+        prefixo);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Navigator.pop(context);
     });
@@ -194,6 +194,7 @@ class _SenhaPageState extends State<SenhaPage> {
                     int.parse(
                       snapshot.data!.modelo!.senha.toString(),
                     ),
+                    snapshot.data!.modelo!.prefixo.toString(),
                   );
 
                   String prefixo = snapshot.data!.modelo!.prefixo.toString();
